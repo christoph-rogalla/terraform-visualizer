@@ -1,0 +1,39 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "dc31afec-8e70-4a8c-b584-35f92c025127",
+  "name": "terraform-visualizer",
+  "friendlyName": "Terraform Visualizer",
+  "description": "Generating visualisation of terraform plan",
+  "helpMarkDown": "",
+  "category": "Utility",
+  "author": "Rhenus",
+  "version": {
+    "Major": 0,
+    "Minor": 1,
+    "Patch": 0
+  },
+  "instanceNameFormat": "Echo $(filePath)",
+  "inputs": [
+    {
+      "name": "filePath",
+      "type": "string",
+      "label": "File path to json terraform plan",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "File path to json terraform plan"
+    },
+    {
+      "name": "outputFilePath",
+      "type": "string",
+      "label": "Output path for generated html file",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "Output path for generated html file"
+    }
+  ],
+  "execution": {
+    "Node20_1": {
+      "target": "index.js"
+    }
+  }
+}

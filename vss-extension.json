@@ -1,0 +1,36 @@
+{
+ "manifestVersion": 1,
+ "id": "my-custom-tasks",
+ "name": "My Custom Tasks",
+ "version": "1.0.0",
+ "publisher": "your-publisher-id",
+ "targets": [
+     {
+         "id": "Microsoft.VisualStudio.Services"
+     }
+ ],
+ "description": "Custom build and release tasks for Azure DevOps",
+ "categories": [
+     "Azure Pipelines"
+ ],
+ "icons": {
+     "default": "images/extension-icon.png"
+ },
+ "files": [
+     {
+         "path": "MyCustomTask"
+     }
+ ],
+ "contributions": [
+     {
+         "id": "my-custom-task",
+         "type": "ms.vss-distributed-task.task",
+         "targets": [
+             "ms.vss-distributed-task.tasks"
+         ],
+         "properties": {
+             "name": "MyCustomTask"
+         }
+     }
+ ]
+}
