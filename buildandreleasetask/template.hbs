@@ -11,7 +11,7 @@
       color: #1f2937;
       font-family: Arial, sans-serif;
       min-height: 100vh;
-      padding: 1.5rem;
+      padding: 2rem;
       margin: 0;
       display: flex;
       flex-direction: column;
@@ -20,66 +20,67 @@
 
     header {
       width: 100%;
-      max-width: 1200px;
-      margin-bottom: 2rem;
+      max-width: 1400px;
+      margin-bottom: 2.5rem;
     }
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       font-weight: 700;
       color: #111827;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     p {
-      color: #6b7280;
-      margin-bottom: 1rem;
+      color: #4b5563;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
     }
 
     .search-wrapper {
       position: relative;
       width: 100%;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     #searchInput {
       width: 100%;
-      padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+      padding: 1rem 1rem 1rem 3rem;
       border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
+      border-radius: 0.75rem;
+      font-size: 1.2rem;
       outline: none;
       transition: border-color 0.2s ease;
     }
 
     #searchInput:focus {
       border-color: #3b82f6;
-      box-shadow: 0 0 0 2px #bfdbfe;
+      box-shadow: 0 0 0 3px #bfdbfe;
     }
 
     svg {
       position: absolute;
-      left: 0.75rem;
-      top: 0.65rem;
-      width: 1.25rem;
-      height: 1.25rem;
+      left: 1rem;
+      top: 1rem;
+      width: 1.5rem;
+      height: 1.5rem;
       color: #9ca3af;
     }
 
     main {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1400px;
       flex: 1;
     }
 
     section {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.6rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -87,36 +88,51 @@
     }
 
     .count-badge {
-      padding: 0.25rem 0.75rem;
+      padding: 0.4rem 1rem;
       border-radius: 9999px;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
-    .action-create { background-color: #dcfce7; color: #166534; }
-    .action-update { background-color: #fef9c3; color: #854d0e; }
-    .action-delete { background-color: #fee2e2; color: #991b1b; }
-    .action-read { background-color: #e0f2fe; color: #075985; }
+    .action-create {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .action-update {
+      background-color: #fef9c3;
+      color: #854d0e;
+    }
+
+    .action-delete {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .action-read {
+      background-color: #e0f2fe;
+      color: #075985;
+    }
 
     .change-item {
       background-color: white;
       border: 1px solid #f3f4f6;
-      border-radius: 1rem;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      padding: 1rem;
-      margin-bottom: 1rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
       transition: box-shadow 0.2s ease;
     }
 
     .change-item:hover {
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .change-header {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
     }
 
     @media (min-width: 640px) {
@@ -129,13 +145,13 @@
 
     .change-title {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1.4rem;
       color: #111827;
       margin: 0;
     }
 
     .change-meta {
-      font-size: 0.9rem;
+      font-size: 1.1rem;
       color: #6b7280;
       margin: 0;
     }
@@ -143,24 +159,24 @@
     .action-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
     .action-tag {
-      padding: 0.25rem 0.5rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
+      font-size: 1rem;
       font-weight: 500;
       text-transform: capitalize;
     }
 
     details {
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
     }
 
     summary {
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: #4b5563;
       transition: color 0.2s;
     }
@@ -172,8 +188,8 @@
     .details-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
     @media (min-width: 640px) {
@@ -183,123 +199,128 @@
     }
 
     .details-box {
-      border-radius: 0.5rem;
-      padding: 0.75rem;
+      border-radius: 0.75rem;
+      padding: 1rem;
       overflow-x: auto;
     }
 
     .details-box h4 {
       font-weight: 600;
       color: #374151;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
     }
 
     pre {
-      background: #f9fafb;
-      padding: 0.5rem;
+      background: #f3f4f6;
+      padding: 0.75rem;
       border-radius: 0.5rem;
-      font-size: 0.85rem;
+      font-size: 1rem;
       overflow-x: auto;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     footer {
-      margin-top: 2rem;
+      margin-top: 2.5rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 1rem;
       color: #9ca3af;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>Terraform Plan Visualizer</h1>
-    <p>Generated overview of all resource changes</p>
+<header>
+  <h1>Terraform Plan Visualizer</h1>
+  <p>Generated overview of all resource changes</p>
 
-    <div class="search-wrapper">
-      <input id="searchInput" type="text" placeholder="Search by module or resource name..." />
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
-      </svg>
-    </div>
-  </header>
+  <div class="search-wrapper">
+    <input id="searchInput" type="text" placeholder="Search by module or resource name..."/>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
+    </svg>
+  </div>
+</header>
 
-  <main id="changesContainer">
-    {{#if changes.length}}
-      {{#each (groupByAction changes)}}
-        {{#if (gt this.length 0)}}
-          <section>
-            <h2>
-              <span>{{@key}} Resources</span>
-              <span class="count-badge
+<main id="changesContainer">
+  {{#if changes.length}}
+    {{#each (groupByAction changes)}}
+      {{#if (gt this.length 0)}}
+        <section>
+          <h2>
+            <span>{{@key}} Resources</span>
+            <span class="count-badge
                 {{#if (eq @key "create")}}action-create{{/if}}
-                {{#if (eq @key "update")}}action-update{{/if}}
-                {{#if (eq @key "delete")}}action-delete{{/if}}
-                {{#if (eq @key "read")}}action-read{{/if}}">
-                {{this.length}}
-              </span>
-            </h2>
+              {{#if (eq @key "update")}}action-update{{/if}}
+              {{#if (eq @key "delete")}}action-delete{{/if}}
+              {{#if (eq @key "read")}}action-read{{/if}}">
+              {{this.length}}
+            </span>
+          </h2>
 
-            {{#each this}}
-              <div class="change-item">
-                <div class="change-header">
-                  <div>
-                    <h3 class="change-title">{{this.address}}</h3>
-                    <p class="change-meta">{{this.type}} ({{this.mode}}) — {{this.provider_name}}</p>
-                  </div>
-                  <div class="action-tags">
-                    {{#each this.change.actions}}
-                      <span class="action-tag
+          {{#each this}}
+            <div class="change-item">
+              <div class="change-header">
+                <div>
+                  <h3 class="change-title">{{this.address}}</h3>
+                  <p class="change-meta">{{this.type}} ({{this.mode}}) — {{this.provider_name}}</p>
+                </div>
+                <div class="action-tags">
+                  {{#each this.change.actions}}
+                    <span class="action-tag
                         {{#if (eq this "create")}}action-create{{/if}}
-                        {{#if (eq this "update")}}action-update{{/if}}
-                        {{#if (eq this "delete")}}action-delete{{/if}}
-                        {{#if (eq this "read")}}action-read{{/if}}">
-                        {{this}}
-                      </span>
-                    {{/each}}
+                      {{#if (eq this "update")}}action-update{{/if}}
+                      {{#if (eq this "delete")}}action-delete{{/if}}
+                      {{#if (eq this "read")}}action-read{{/if}}">
+                      {{this}}
+                    </span>
+                  {{/each}}
+                </div>
+              </div>
+
+              <details>
+                <summary>View Details</summary>
+                <div class="details-grid">
+                  <div class="details-box" style="background-color:#fee2e2;">
+                    <h4>Before</h4>
+                    <pre style="background-color:#fee2e2;">{{{safeJsonWithSensitiveFlags this.change.before
+                                                                                         this.change.before_sensitive}}}</pre>
+                  </div>
+                  <div class="details-box" style="background-color:#dcfce7;">
+                    <h4>After</h4>
+                    <pre style="background-color:#dcfce7;">{{{highlightChanges this.change.before this.change.after
+                                                                               this.change.before_sensitive
+                                                                               this.change.after_sensitive}}}</pre>
+
                   </div>
                 </div>
+              </details>
+            </div>
+          {{/each}}
+        </section>
+      {{/if}}
+    {{/each}}
+  {{else}}
+    <p style="text-align:center; color:#6b7280; font-style:italic; font-size:1.1rem;">No resource changes found.</p>
+  {{/if}}
+</main>
 
-                <details>
-                  <summary>View Details</summary>
-                  <div class="details-grid">
-                    <div class="details-box" style="background-color:#fee2e2;">
-                      <h4>Before</h4>
-                      <pre>{{{json this.change.before}}}</pre>
-                    </div>
-                    <div class="details-box" style="background-color:#dcfce7;">
-                      <h4>After</h4>
-                      <pre>{{{highlightChanges this.change.before this.change.after}}}</pre>
-                    </div>
-                  </div>
-                </details>
-              </div>
-            {{/each}}
-          </section>
-        {{/if}}
-      {{/each}}
-    {{else}}
-      <p style="text-align:center; color:#6b7280; font-style:italic;">No resource changes found.</p>
-    {{/if}}
-  </main>
+<footer>
+  Generated automatically by Terraform Visualizer Task
+</footer>
 
-  <footer>
-    Generated automatically by Terraform Visualizer Task
-  </footer>
-
-  <script>
-    const searchInput = document.getElementById('searchInput');
-    const items = document.querySelectorAll('.change-item');
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      items.forEach(item => {
-        const title = item.querySelector('.change-title').textContent.toLowerCase();
-        item.style.display = title.includes(query) ? '' : 'none';
-      });
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const items = document.querySelectorAll('.change-item');
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    items.forEach(item => {
+      const title = item.querySelector('.change-title').textContent.toLowerCase();
+      item.style.display = title.includes(query) ? '' : 'none';
     });
-  </script>
+  });
+</script>
 </body>
 </html>

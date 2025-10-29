@@ -13,7 +13,16 @@ class HtmlGenerator {
         return compiledTemplate({ changes });
     }
     registerVisualisationFunctions() {
-        handlebars_1.default.registerHelper("json", (context) => JSON.stringify(context, null, 2));
+        let maskSensitive = this.maskSensitive;
+        handlebars_1.default.registerHelper("safeJsonWithSensitiveFlags", function (obj, sensitiveMap) {
+            try {
+                const masked = maskSensitive(obj, sensitiveMap);
+                return JSON.stringify(masked, null, 2);
+            }
+            catch (e) {
+                return "[Error rendering object]";
+            }
+        });
         handlebars_1.default.registerHelper('groupByAction', (changes) => {
             const grouped = {};
             changes.forEach(change => {
@@ -31,18 +40,23 @@ class HtmlGenerator {
             });
             return grouped;
         });
-        handlebars_1.default.registerHelper('highlightChanges', (before, after) => {
+        handlebars_1.default.registerHelper('highlightChanges', (before, after, beforeSensitive, afterSensitive) => {
             before = before || {};
             after = after || {};
-            const allKeys = Array.from(new Set([...Object.keys(before), ...Object.keys(after)]));
+            beforeSensitive = beforeSensitive || {};
+            afterSensitive = afterSensitive || {};
+            // Mask secrets using Terraform metadata
+            const safeBefore = maskSensitive(before, beforeSensitive);
+            const safeAfter = maskSensitive(after, afterSensitive);
+            const allKeys = Array.from(new Set([...Object.keys(safeBefore), ...Object.keys(safeAfter)]));
             const parts = allKeys.map(k => {
-                const b = JSON.stringify(before[k], null, 2);
-                const a = JSON.stringify(after[k], null, 2);
-                if (!(k in before)) {
+                const b = JSON.stringify(safeBefore[k], null, 2);
+                const a = JSON.stringify(safeAfter[k], null, 2);
+                if (!(k in safeBefore)) {
                     // Added key
                     return `<span class="bg-green-100 text-green-800 font-semibold">"${k}": ${a}</span>`;
                 }
-                else if (!(k in after)) {
+                else if (!(k in safeAfter)) {
                     // Removed key
                     return `<span class="bg-red-100 text-red-800 line-through font-semibold">"${k}": ${b}</span>`;
                 }
@@ -68,6 +82,24 @@ class HtmlGenerator {
         handlebars_1.default.registerHelper('and', () => Array.prototype.slice.call(arguments, 0, -1).every(Boolean));
         handlebars_1.default.registerHelper('or', () => Array.prototype.slice.call(arguments, 0, -1).some(Boolean));
         handlebars_1.default.registerHelper('not', (value) => !value);
+    }
+    maskSensitive(data, sensitiveMap) {
+        if (!data || typeof data !== 'object')
+            return data;
+        if (Array.isArray(data)) {
+            return data.map((item, i) => this.maskSensitive(item, sensitiveMap[i]));
+        }
+        const result = {};
+        for (const key of Object.keys(data)) {
+            const isSensitive = sensitiveMap && sensitiveMap[key] === true;
+            if (isSensitive) {
+                result[key] = '***';
+            }
+            else {
+                result[key] = this.maskSensitive(data[key], sensitiveMap[key]);
+            }
+        }
+        return result;
     }
 }
 exports.default = HtmlGenerator;
