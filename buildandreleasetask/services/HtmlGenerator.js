@@ -35,35 +35,31 @@ class HtmlGenerator {
             });
             return grouped;
         });
-        handlebars_1.default.registerHelper('diffHighlight', function (before, after, mode) {
-            const escapeHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        handlebars_1.default.registerHelper('highlightChanges', (before, after) => {
             before = before || {};
             after = after || {};
-            // Collect top-level keys
             const allKeys = Array.from(new Set([...Object.keys(before), ...Object.keys(after)]));
-            const render = (obj) => {
-                const parts = allKeys.map(k => {
-                    const b = before[k];
-                    const a = after[k];
-                    const keyHtml = `"${escapeHtml(k)}": `;
-                    const val = obj[k] !== undefined ? JSON.stringify(obj[k], null, 2) : 'undefined';
-                    if (mode === 'after') {
-                        if (!(k in before)) {
-                            return `<span class="diff-added font-bold text-green-700">${keyHtml}${escapeHtml(val)}</span>`;
-                        }
-                        if (!(k in after)) {
-                            return `<span class="diff-removed line-through text-red-600 opacity-80">${keyHtml}${escapeHtml(JSON.stringify(b, null, 2))}</span>`;
-                        }
-                        if (JSON.stringify(b) !== JSON.stringify(a)) {
-                            return `<span class="diff-added font-bold text-green-700">${keyHtml}${escapeHtml(val)}</span>`;
-                        }
-                    }
-                    return `${keyHtml}${escapeHtml(val)}`;
-                });
-                return `{${parts.length ? '<br>' + parts.join(',<br>') + '<br>' : ''}}`;
-            };
-            const html = `<pre class="${mode === 'after' ? 'after-diff' : 'before-diff'}">${render(mode === 'after' ? after : before)}</pre>`;
-            return new handlebars_1.default.SafeString(html);
+            const parts = allKeys.map(k => {
+                const b = JSON.stringify(before[k], null, 2);
+                const a = JSON.stringify(after[k], null, 2);
+                if (!(k in before)) {
+                    // Added key
+                    return `<span class="bg-green-100 text-green-800 font-semibold">"${k}": ${a}</span>`;
+                }
+                else if (!(k in after)) {
+                    // Removed key
+                    return `<span class="bg-red-100 text-red-800 line-through font-semibold">"${k}": ${b}</span>`;
+                }
+                else if (b !== a) {
+                    // Modified key
+                    return `<span class="bg-yellow-100 text-yellow-800 font-semibold">"${k}": ${a}</span>`;
+                }
+                else {
+                    // Unchanged
+                    return `"${k}": ${a}`;
+                }
+            });
+            return new handlebars_1.default.SafeString(`{<br>${parts.join(',<br>')}<br>}`);
         });
     }
     registerLogicFunctions() {

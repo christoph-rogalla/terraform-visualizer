@@ -104,13 +104,13 @@
                     View Details
                   </summary>
                   <div class="grid grid-cols-2 gap-4 mt-3">
-                    <div>
+                    <div class="bg-red-50 p-3 rounded">
                       <h4 class="font-medium text-gray-700 mb-1">Before</h4>
-                      <pre>{{{json this.change.before}}}</pre>
+                      <pre class="bg-red-50">{{{json this.change.before}}}</pre>
                     </div>
-                    <div>
+                    <div class="bg-green-50 p-3 rounded">
                       <h4 class="font-medium text-gray-700 mb-1">After</h4>
-                      <pre>{{{json this.change.after}}}</pre>
+                      <pre class="bg-green-50">{{{highlightChanges this.change.before this.change.after}}}</pre>
                     </div>
                   </div>
                 </details>
