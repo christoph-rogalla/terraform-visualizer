@@ -8,17 +8,7 @@ import * as path from 'path';
 
 async function run() {
   try {
-    console.log('Current directory:', process.cwd());
-
-    fs.readdir(process.cwd(), (err, files) => {
-      if (err) {
-        console.error('Error reading directory:', err);
-      } else {
-        console.log('Directory contents:', files);
-      }
-    });
-
-    const templatePath = path.join(process.cwd(), 'buildandrelease', 'template.hbs');
+    const templatePath = path.join(__dirname, 'template.hbs');
     console.log('Looking for template at:', templatePath);
     console.log('Exists?', fs.existsSync(templatePath));
 
@@ -26,7 +16,7 @@ async function run() {
     const filePath = tl.getInput('filePath', true);
     const outputFilePath = tl.getInput('outputFilePath', true);
     const includeReadActions = tl.getInput('includeReadActions', false) == 'true';
-    const template = fs.readFileSync("./template.hbs", "utf8");
+    const template = fs.readFileSync(templatePath, "utf8");
 
     let fileReader = new JsonFileReader();
     let changeDetector = new TerraformChangeDetector();
