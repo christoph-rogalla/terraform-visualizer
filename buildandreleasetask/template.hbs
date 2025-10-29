@@ -13,95 +13,106 @@
     .action-update { background-color: #fef9c3; color: #854d0e; }
     .action-delete { background-color: #fee2e2; color: #991b1b; }
     .action-read { background-color: #e0f2fe; color: #075985; }
-    pre { background: #f9fafb; padding: 0.5rem; border-radius: 0.5rem; font-size: 0.85rem; overflow-x: auto; }
+
+    pre {
+      background: #f9fafb;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
   </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen p-4 sm:p-6">
-  <header class="mb-6 sm:mb-8 w-full max-w-full mx-auto">
-    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Terraform Plan Visualizer</h1>
-    <p class="text-gray-500 mb-4">Generated overview of all resource changes</p>
+  <div class="w-full max-w-screen-xl mx-auto flex flex-col h-full">
+    <header class="mb-6 sm:mb-8 w-full">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Terraform Plan Visualizer</h1>
+      <p class="text-gray-500 mb-4">Generated overview of all resource changes</p>
 
-    <div class="relative w-full mb-4">
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Search by module or resource name..."
-        class="w-full border border-gray-300 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <svg xmlns="http://www.w3.org/2000/svg"
-           class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
-           fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
-      </svg>
-    </div>
-  </header>
+      <div class="relative w-full mb-4">
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search by module or resource name..."
+          class="w-full border border-gray-300 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
+        </svg>
+      </div>
+    </header>
 
-  <main id="changesContainer" class="space-y-8 w-full max-w-full mx-auto">
-    {{#if changes.length}}
-      {{#each (groupByAction changes)}}
-        {{#if (gt this.length 0)}}
-          <section>
-            <h2 class="text-xl sm:text-2xl font-semibold mb-4 capitalize">
-              {{@key}} Resources
-              <span class="px-3 py-1 rounded-full text-sm ml-2
-                {{#if (eq @key "create")}}action-create{{/if}}
-                {{#if (eq @key "update")}}action-update{{/if}}
-                {{#if (eq @key "delete")}}action-delete{{/if}}
-                {{#if (eq @key "read")}}action-read{{/if}}">
-                {{this.length}}
-              </span>
-            </h2>
+    <main id="changesContainer" class="flex-1 overflow-y-auto space-y-8 w-full">
+      {{#if changes.length}}
+        {{#each (groupByAction changes)}}
+          {{#if (gt this.length 0)}}
+            <section>
+              <h2 class="text-xl sm:text-2xl font-semibold mb-4 capitalize flex items-center justify-between">
+                <span>{{@key}} Resources</span>
+                <span class="px-3 py-1 rounded-full text-sm
+                  {{#if (eq @key "create")}}action-create{{/if}}
+                  {{#if (eq @key "update")}}action-update{{/if}}
+                  {{#if (eq @key "delete")}}action-delete{{/if}}
+                  {{#if (eq @key "read")}}action-read{{/if}}">
+                  {{this.length}}
+                </span>
+              </h2>
 
-            <div class="space-y-4">
-              {{#each this}}
-                <section class="change-item bg-white shadow-sm rounded-xl p-4 sm:p-5 border border-gray-100 hover:shadow-md transition w-full">
-                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 sm:mb-3">
-                    <div class="flex-1">
-                      <h3 class="font-semibold text-lg sm:text-xl text-gray-900 change-title">{{this.address}}</h3>
-                      <p class="text-sm sm:text-base text-gray-500">{{this.type}} ({{this.mode}}) — {{this.provider_name}}</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
-                      {{#each this.change.actions}}
-                        <span class="px-2 py-1 rounded-full text-sm font-medium capitalize
-                          {{#if (eq this "create")}}action-create{{/if}}
-                          {{#if (eq this "update")}}action-update{{/if}}
-                          {{#if (eq this "delete")}}action-delete{{/if}}
-                          {{#if (eq this "read")}}action-read{{/if}}">
-                          {{this}}
-                        </span>
-                      {{/each}}
-                    </div>
-                  </div>
-
-                  <details class="mt-2">
-                    <summary class="cursor-pointer text-sm text-gray-600 hover:text-gray-900">View Details</summary>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 w-full">
-                      <div class="bg-red-50 p-3 rounded w-full overflow-x-auto">
-                        <h4 class="font-medium text-gray-700 mb-1">Before</h4>
-                        <pre class="bg-red-50 w-full">{{{json this.change.before}}}</pre>
+              <div class="space-y-4">
+                {{#each this}}
+                  <section class="change-item bg-white shadow-sm rounded-xl p-4 sm:p-5 border border-gray-100 hover:shadow-md transition w-full">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 sm:mb-3 gap-2 sm:gap-4">
+                      <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-lg sm:text-xl text-gray-900 change-title truncate">{{this.address}}</h3>
+                        <p class="text-sm sm:text-base text-gray-500 truncate">{{this.type}} ({{this.mode}}) — {{this.provider_name}}</p>
                       </div>
-                      <div class="bg-green-50 p-3 rounded w-full overflow-x-auto">
-                        <h4 class="font-medium text-gray-700 mb-1">After</h4>
-                        <pre class="bg-green-50 w-full">{{{highlightChanges this.change.before this.change.after}}}</pre>
+                      <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
+                        {{#each this.change.actions}}
+                          <span class="px-2 py-1 rounded-full text-sm font-medium capitalize
+                            {{#if (eq this "create")}}action-create{{/if}}
+                            {{#if (eq this "update")}}action-update{{/if}}
+                            {{#if (eq this "delete")}}action-delete{{/if}}
+                            {{#if (eq this "read")}}action-read{{/if}}">
+                            {{this}}
+                          </span>
+                        {{/each}}
                       </div>
                     </div>
-                  </details>
-                </section>
-              {{/each}}
-            </div>
-          </section>
-        {{/if}}
-      {{/each}}
-    {{else}}
-      <p class="text-gray-600 text-center italic">No resource changes found.</p>
-    {{/if}}
-  </main>
 
-  <footer class="mt-10 text-center text-sm text-gray-400">
-    Generated automatically by Terraform Visualizer Task
-  </footer>
+                    <details class="mt-2">
+                      <summary class="cursor-pointer text-sm text-gray-600 hover:text-gray-900">View Details</summary>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 w-full">
+                        <div class="bg-red-50 p-3 rounded w-full overflow-x-auto">
+                          <h4 class="font-medium text-gray-700 mb-1">Before</h4>
+                          <pre class="bg-red-50 w-full">{{{json this.change.before}}}</pre>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded w-full overflow-x-auto">
+                          <h4 class="font-medium text-gray-700 mb-1">After</h4>
+                          <pre class="bg-green-50 w-full">{{{highlightChanges this.change.before this.change.after}}}</pre>
+                        </div>
+                      </div>
+                    </details>
+                  </section>
+                {{/each}}
+              </div>
+            </section>
+          {{/if}}
+        {{/each}}
+      {{else}}
+        <p class="text-gray-600 text-center italic">No resource changes found.</p>
+      {{/if}}
+    </main>
+
+    <footer class="mt-6 sm:mt-10 text-center text-sm text-gray-400">
+      Generated automatically by Terraform Visualizer Task
+    </footer>
+  </div>
 
   <script>
     const searchInput = document.getElementById('searchInput');
