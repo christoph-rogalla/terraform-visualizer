@@ -4,9 +4,25 @@ import TerraformChangeDetector from "./services/TerraformChangeDetector";
 import HtmlGenerator from "./services/HtmlGenerator";
 import HtmlFileExporter from "./services/HtmlFileExporter";
 import fs from "fs";
+import * as path from 'path';
 
 async function run() {
   try {
+    console.log('Current directory:', process.cwd());
+
+    fs.readdir(process.cwd(), (err, files) => {
+      if (err) {
+        console.error('Error reading directory:', err);
+      } else {
+        console.log('Directory contents:', files);
+      }
+    });
+
+    const templatePath = path.join(process.cwd(), 'buildandrelease', 'template.hbs');
+    console.log('Looking for template at:', templatePath);
+    console.log('Exists?', fs.existsSync(templatePath));
+
+
     const filePath = tl.getInput('filePath', true);
     const outputFilePath = tl.getInput('outputFilePath', true);
     const includeReadActions = tl.getInput('includeReadActions', false) == 'true';
