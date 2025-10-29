@@ -36,40 +36,6 @@
       font-size: 0.85rem;
       overflow-x: auto;
     }
-
-    .before-diff {
-      background-color: #fef2f2;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-    }
-
-    .after-diff {
-      background-color: #f0fdf4;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-    }
-
-    .diff-span {
-      padding: 0 2px;
-      border-radius: 2px;
-    }
-
-    .diff-added {
-      color: #166534;
-      font-weight: 600;
-    }
-
-    .diff-removed {
-      color: #991b1b;
-      font-weight: 600;
-    }
-
-    .diff-changed {
-      background-color: #fef9c3;
-      font-weight: 600;
-    }
   </style>
 </head>
 
@@ -98,8 +64,7 @@
   {{#if changes.length}}
 
     {{#each (groupByAction changes)}}
-    {{!-- Skip rendering if this is the "read" group and it's empty --}}
-      {{#if (or (ne @key "read") (gt this.length 0))}}
+      {{#if (gt this.length 0)}}
         <section>
           <h2 class="text-2xl font-semibold mb-4 capitalize">
             {{@key}} Resources
@@ -141,11 +106,11 @@
                   <div class="grid grid-cols-2 gap-4 mt-3">
                     <div>
                       <h4 class="font-medium text-gray-700 mb-1">Before</h4>
-                      {{{diffHighlight this.change.before this.change.after "before"}}}
+                      <pre>{{{json this.change.before}}}</pre>
                     </div>
                     <div>
                       <h4 class="font-medium text-gray-700 mb-1">After</h4>
-                      {{{diffHighlight this.change.before this.change.after "after"}}}
+                      <pre>{{{json this.change.after}}}</pre>
                     </div>
                   </div>
                 </details>
