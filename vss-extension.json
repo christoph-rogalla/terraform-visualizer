@@ -23,13 +23,13 @@
   ],
   "contributions": [
     {
-      "id": "terraform-visualizer",
+      "id": "TerraformVisualizer",
       "type": "ms.vss-distributed-task.task",
       "targets": [
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "buidandreleasetask"
+        "name": "buildandreleasetask"
       }
     }
   ]

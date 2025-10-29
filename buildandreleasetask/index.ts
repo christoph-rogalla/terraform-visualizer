@@ -8,6 +8,7 @@ async function run() {
   try {
     const filePath = tl.getInput('filePath', true);
     const outputFilePath = tl.getInput('outputFilePath', true);
+    const includeReadActions = tl.getInput('includeReadActions', false) == 'true';
 
     let fileReader = new JsonFileReader();
     let changeDetector = new TerraformChangeDetector();
@@ -16,7 +17,7 @@ async function run() {
 
     // read and parse the JSON file
     let plan = fileReader.readTerraformPlan(filePath!);
-    let changes = changeDetector.detectChanges(plan);
+    let changes = changeDetector.detectChanges(plan, includeReadActions);
     let html = htmlGenerator.generateHtmlFrom(changes);
     fileExporter.export(html, outputFilePath!);
     tl.setResult(tl.TaskResult.Succeeded, "Successfully generated Terraform visualisation HTML file");
