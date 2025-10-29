@@ -3,15 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsdom_1 = require("jsdom");
 const handlebars_1 = __importDefault(require("handlebars"));
 const fs_1 = __importDefault(require("fs"));
-const dom = new jsdom_1.JSDOM(`<!DOCTYPE html><html><body></body></html>`);
-const document = dom.window.document;
 class HtmlGenerator {
-    styleElement = document.createElement("style");
-    headerElement = document.createElement("h1");
-    sectionsDetailsWrapperElement = document.createElement("div");
     generateHtmlFrom(changes) {
         console.log(changes[1].change);
         console.log("Generating HTML...");

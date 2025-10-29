@@ -12,11 +12,9 @@
   "description": "",
   "dependencies": {
     "azure-pipelines-task-lib": "^5.2.1",
-    "handlebars": "^4.7.8",
-    "jsdom": "^27.0.1"
+    "handlebars": "^4.7.8"
   },
   "devDependencies": {
-    "@types/jsdom": "^27.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.9.1",
     "@types/q": "^1.5.8",

@@ -1,14 +1,8 @@
-﻿import {JSDOM} from "jsdom";
-import {ResourceChanges} from "./TerraformPlan.js";
+﻿import {ResourceChanges} from "./TerraformPlan.js";
 import handlebars from "handlebars";
 import fs from "fs";
 
-const dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`);
-const document = dom.window.document;
 export default class HtmlGenerator {
-  private styleElement: HTMLStyleElement = document.createElement("style");
-  private headerElement: HTMLHeadingElement = document.createElement("h1");
-  private sectionsDetailsWrapperElement: HTMLDivElement = document.createElement("div");
 
   generateHtmlFrom(changes: ResourceChanges[]) {
     console.log(changes[1].change)
