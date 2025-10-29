@@ -4,15 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const handlebars_1 = __importDefault(require("handlebars"));
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 class HtmlGenerator {
-    generateHtmlFrom(changes) {
+    generateHtmlFrom(changes, template) {
         console.log("Generating HTML...");
         this.registerLogicFunctions();
         this.registerVisualisationFunctions();
-        const templatePath = path_1.default.join(__dirname, "..", "templates", "template.hbs");
-        const template = fs_1.default.readFileSync(templatePath, "utf8");
         let compiledTemplate = handlebars_1.default.compile(template);
         return compiledTemplate({ changes });
     }

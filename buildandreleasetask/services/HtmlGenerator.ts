@@ -1,16 +1,12 @@
 ﻿import {ResourceChanges} from "./TerraformPlan.js";
 import handlebars from "handlebars";
-import fs from "fs";
-import path from "path";
 
 export default class HtmlGenerator {
 
-  generateHtmlFrom(changes: ResourceChanges[]) {
+  generateHtmlFrom(changes: ResourceChanges[], template: string) {
     console.log("Generating HTML...");
     this.registerLogicFunctions();
     this.registerVisualisationFunctions();
-    const templatePath = path.join(__dirname, "..", "templates", "template.hbs");
-    const template = fs.readFileSync(templatePath, "utf8");
     let compiledTemplate = handlebars.compile(template);
     return compiledTemplate({changes});
   }
