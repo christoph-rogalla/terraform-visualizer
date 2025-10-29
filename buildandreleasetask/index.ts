@@ -8,14 +8,10 @@ import * as path from 'path';
 
 async function run() {
   try {
-    const templatePath = path.join(__dirname, 'template.hbs');
-    console.log('Looking for template at:', templatePath);
-    console.log('Exists?', fs.existsSync(templatePath));
-
-
     const filePath = tl.getInput('filePath', true);
     const outputFilePath = tl.getInput('outputFilePath', true);
     const includeReadActions = tl.getInput('includeReadActions', false) == 'true';
+    const templatePath = path.join(__dirname, 'template.hbs');
     const template = fs.readFileSync(templatePath, "utf8");
 
     let fileReader = new JsonFileReader();
