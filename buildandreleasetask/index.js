@@ -1,37 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -39,26 +6,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tl = require("azure-pipelines-task-lib/task");
 const JsonFileReader_1 = __importDefault(require("./services/JsonFileReader"));
 const TerraformChangeDetector_1 = __importDefault(require("./services/TerraformChangeDetector"));
-const HtmlGenerator_1 = __importDefault(require("./services/HtmlGenerator"));
 const HtmlFileExporter_1 = __importDefault(require("./services/HtmlFileExporter"));
-const fs_1 = __importDefault(require("fs"));
-const path = __importStar(require("path"));
+const TemplateBuilder_1 = __importDefault(require("./services/TemplateBuilder"));
+const logic_functions_1 = require("./registration/logic-functions");
+const visual_functions_1 = require("./registration/visual-functions");
 async function run() {
     try {
+        // params
         const filePath = tl.getInput('filePath', true);
         const outputFilePath = tl.getInput('outputFilePath', true);
         const includeReadActions = tl.getInput('includeReadActions', false) == 'true';
-        const templatePath = path.join(__dirname, 'template.hbs');
-        const template = fs_1.default.readFileSync(templatePath, "utf8");
+        // services
         let fileReader = new JsonFileReader_1.default();
         let changeDetector = new TerraformChangeDetector_1.default();
-        let htmlGenerator = new HtmlGenerator_1.default();
         let fileExporter = new HtmlFileExporter_1.default();
+        let templateBuilder = new TemplateBuilder_1.default();
         // read and parse the JSON file
         let plan = fileReader.readTerraformPlan(filePath);
         let changes = changeDetector.detectChanges(plan, includeReadActions);
-        let html = htmlGenerator.generateHtmlFrom(changes, template);
-        console.log("test");
+        (0, logic_functions_1.registerLogicFunctions)();
+        (0, visual_functions_1.registerVisualisationFunctions)();
+        let html = templateBuilder.build(changes);
         fileExporter.export(html, outputFilePath);
         tl.setResult(tl.TaskResult.Succeeded, "Successfully generated Terraform visualisation HTML file");
     }

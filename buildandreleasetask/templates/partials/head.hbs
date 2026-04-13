@@ -1,10 +1,7 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
+﻿<head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Terraform Plan Visualization</title>
-
   <style>
     body {
       background-color: #f9fafb;
@@ -229,98 +226,3 @@
     }
   </style>
 </head>
-
-<body>
-<header>
-  <h1>Terraform Plan Visualizer</h1>
-  <p>Generated overview of all resource changes</p>
-
-  <div class="search-wrapper">
-    <input id="searchInput" type="text" placeholder="Search by module or resource name..."/>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
-    </svg>
-  </div>
-</header>
-
-<main id="changesContainer">
-  {{#if changes.length}}
-    {{#each (groupByAction changes)}}
-      {{#if (gt this.length 0)}}
-        <section>
-          <h2>
-            <span>{{@key}} Resources</span>
-            <span class="count-badge
-                {{#if (eq @key "create")}}action-create{{/if}}
-              {{#if (eq @key "update")}}action-update{{/if}}
-              {{#if (eq @key "delete")}}action-delete{{/if}}
-              {{#if (eq @key "read")}}action-read{{/if}}">
-              {{this.length}}
-            </span>
-          </h2>
-
-          {{#each this}}
-            <div class="change-item">
-              <div class="change-header">
-                <div>
-                  <h3 class="change-title">{{this.address}}</h3>
-                  <p class="change-meta">{{this.type}} ({{this.mode}}) — {{this.provider_name}}</p>
-                </div>
-                <div class="action-tags">
-                  {{#each this.change.actions}}
-                    <span class="action-tag
-                        {{#if (eq this "create")}}action-create{{/if}}
-                      {{#if (eq this "update")}}action-update{{/if}}
-                      {{#if (eq this "delete")}}action-delete{{/if}}
-                      {{#if (eq this "read")}}action-read{{/if}}">
-                      {{this}}
-                    </span>
-                  {{/each}}
-                </div>
-              </div>
-
-              <details>
-                <summary>View Details</summary>
-                <div class="details-grid">
-                  <div class="details-box" style="background-color:#fee2e2;">
-                    <h4>Before</h4>
-                    <pre style="background-color:#fee2e2;">{{{safeJsonWithSensitiveFlags this.change.before
-                                                                                         this.change.before_sensitive}}}</pre>
-                  </div>
-                  <div class="details-box" style="background-color:#dcfce7;">
-                    <h4>After</h4>
-                    <pre style="background-color:#dcfce7;">{{{highlightChanges this.change.before this.change.after
-                                                                               this.change.before_sensitive
-                                                                               this.change.after_sensitive}}}</pre>
-
-                  </div>
-                </div>
-              </details>
-            </div>
-          {{/each}}
-        </section>
-      {{/if}}
-    {{/each}}
-  {{else}}
-    <p style="text-align:center; color:#6b7280; font-style:italic; font-size:1.1rem;">No resource changes found.</p>
-  {{/if}}
-</main>
-
-<footer>
-  Generated automatically by Terraform Visualizer Task
-</footer>
-
-<script>
-  const searchInput = document.getElementById('searchInput');
-  const items = document.querySelectorAll('.change-item');
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    items.forEach(item => {
-      const title = item.querySelector('.change-title').textContent.toLowerCase();
-      item.style.display = title.includes(query) ? '' : 'none';
-    });
-  });
-</script>
-</body>
-</html>

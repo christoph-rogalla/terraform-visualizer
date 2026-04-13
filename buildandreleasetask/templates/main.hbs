@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+{{> head}}
+<body>
+{{> header}}
+<main id="changesContainer">
+  {{#if changes.length}}
+    {{#each (groupByAction changes)}}
+      {{#if (gt this.length 0)}}
+        {{> change-section}}
+      {{/if}}
+    {{/each}}
+  {{else}}
+    <p>No resource changes found.</p>
+  {{/if}}
+</main>
+{{> footer}}
+</body>
+</html>
