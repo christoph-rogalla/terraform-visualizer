@@ -10,7 +10,9 @@ class TerraformChangeDetector {
             plan.resource_changes.filter(change => !change.change.actions.includes(TerraformPlan_js_1.ActionType.NONE) && !change.change.actions.includes(TerraformPlan_js_1.ActionType.READ));
         for (const change of filtered) {
             // replace create and delete actions with replace action
-            if (change.change.actions.includes(TerraformPlan_js_1.ActionType.CREATE && TerraformPlan_js_1.ActionType.DELETE)) {
+            console.log(change.change.actions, change.change.actions.includes(TerraformPlan_js_1.ActionType.CREATE && TerraformPlan_js_1.ActionType.DELETE));
+            let actions = change.change.actions;
+            if (actions.includes(TerraformPlan_js_1.ActionType.CREATE) && actions.includes(TerraformPlan_js_1.ActionType.DELETE)) {
                 change.change.actions = [TerraformPlan_js_1.ActionType.REPLACE];
             }
         }

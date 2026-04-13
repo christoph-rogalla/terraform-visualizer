@@ -4,7 +4,7 @@
 <body>
 {{> header}}
 <main id="changesContainer">
-  {{#if changes.length}}
+  {{#if (gt changes.length 0)}}
     {{#each (groupByAction changes)}}
       {{#if (gt this.length 0)}}
         {{> change-section}}

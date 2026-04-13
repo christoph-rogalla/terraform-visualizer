@@ -9,7 +9,8 @@ export default class TerraformChangeDetector {
       plan.resource_changes.filter(change => !change.change.actions.includes(ActionType.NONE) && !change.change.actions.includes(ActionType.READ));
     for (const change of filtered) {
       // replace create and delete actions with replace action
-      if (change.change.actions.includes(ActionType.CREATE && ActionType.DELETE)) {
+      let actions = change.change.actions;
+      if (actions.includes(ActionType.CREATE) && actions.includes(ActionType.DELETE)) {
         change.change.actions = [ActionType.REPLACE]
       }
     }
