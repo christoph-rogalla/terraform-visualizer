@@ -1,6 +1,6 @@
-﻿<section>
-  <h2>{{@key}} Resources</h2>
-  {{#each this}}
-    {{> change-item}}
-  {{/each}}
+﻿<section class="action-{{@key}}">
+  <h2>{{@key}}d Resources</h2>
+    {{#each this}}
+      {{> change-item actionType=action}}
+    {{/each}}
 </section>
