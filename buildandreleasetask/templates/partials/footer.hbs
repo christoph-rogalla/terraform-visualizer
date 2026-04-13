@@ -1,5 +1,19 @@
 ﻿<footer>Generated automatically by Terraform Visualizer Task</footer>
 <script>
-  const searchInput = document.getElementById('searchInput');
-  ...
+  const searchInput = document.getElementById("searchInput");
+  const items = document.querySelectorAll(".change-item");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+
+    items.forEach(item => {
+      const title = item.querySelector(".change-title").textContent.toLowerCase();
+
+      if (title.includes(query)) {
+        item.style.display = "";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  });
 </script>
