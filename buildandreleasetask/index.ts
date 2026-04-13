@@ -23,6 +23,7 @@ async function run() {
     let plan = fileReader.readTerraformPlan(filePath!);
     let changes = changeDetector.detectChanges(plan, includeReadActions);
     let html = htmlGenerator.generateHtmlFrom(changes, template);
+    console.log("test");
     fileExporter.export(html, outputFilePath!);
     tl.setResult(tl.TaskResult.Succeeded, "Successfully generated Terraform visualisation HTML file");
   } catch (err: any) {

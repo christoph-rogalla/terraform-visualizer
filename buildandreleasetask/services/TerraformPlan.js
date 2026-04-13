@@ -9,4 +9,4 @@ var ActionType;
     ActionType["DELETE"] = "delete";
     ActionType["REPLACE"] = "replace";
     ActionType["NONE"] = "no-op";
-})(ActionType = exports.ActionType || (exports.ActionType = {}));
+})(ActionType || (exports.ActionType = ActionType = {}));

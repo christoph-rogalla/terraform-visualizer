@@ -8,14 +8,14 @@ export default class HtmlGenerator {
     this.registerLogicFunctions();
     this.registerVisualisationFunctions();
     let compiledTemplate = handlebars.compile(template);
+    console.log("Changes:", JSON.stringify(changes[0]));
     return compiledTemplate({changes});
   }
 
   private registerVisualisationFunctions() {
-    let maskSensitive = this.maskSensitive;
-    handlebars.registerHelper("safeJsonWithSensitiveFlags", function (obj, sensitiveMap) {
+    handlebars.registerHelper("safeJsonWithSensitiveFlags", (obj, sensitiveMap) => {
       try {
-        const masked = maskSensitive(obj, sensitiveMap);
+        const masked = this.maskSensitive(obj, sensitiveMap);
         return JSON.stringify(masked, null, 2);
       } catch (e) {
         return "[Error rendering object]";
@@ -44,8 +44,8 @@ export default class HtmlGenerator {
       afterSensitive = afterSensitive || {};
 
       // Mask secrets using Terraform metadata
-      const safeBefore = maskSensitive(before, beforeSensitive);
-      const safeAfter = maskSensitive(after, afterSensitive);
+      const safeBefore = this.maskSensitive(before, beforeSensitive);
+      const safeAfter = this.maskSensitive(after, afterSensitive);
 
       const allKeys = Array.from(new Set([...Object.keys(safeBefore), ...Object.keys(safeAfter)]));
       const parts = allKeys.map(k => {

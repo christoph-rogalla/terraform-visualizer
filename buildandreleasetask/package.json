@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc && node ./index.js"
+    "start": "npx tsc && npx npm run local",
+    "local": "cross-env INPUT_FILEPATH=C:/test-terraform-visualizer/input/test.json INPUT_OUTPUTFILEPATH=output.html node ./index.js",
+    "package": "cd ../ && npx tfx extension create --manifest-globs vss-extension.json --rev-version",
+    "publish": "cd../ && npx tfx extension publish --manifest-globs vss-extension.json"
   },
   "keywords": [],
   "author": "",
@@ -12,12 +15,14 @@
   "description": "",
   "dependencies": {
     "azure-pipelines-task-lib": "^5.2.1",
-    "handlebars": "^4.7.8"
+    "handlebars": "4.7.9"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.9.1",
+    "@types/node": "^20.0.0",
     "@types/q": "^1.5.8",
-    "sync-request": "^6.1.0"
+    "cross-env": "^10.1.0",
+    "sync-request": "^6.1.0",
+    "typescript": "^6.0.2"
   }
 }

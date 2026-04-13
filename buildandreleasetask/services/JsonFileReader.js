@@ -8,8 +8,7 @@ class JsonFileReader {
     readTerraformPlan(filePath) {
         console.log("Trying to read and parse JSON file...");
         const content = fs_1.default.readFileSync(filePath, "utf8");
-        const plan = JSON.parse(content.trim());
-        return plan;
+        return JSON.parse(content.trim());
     }
 }
 exports.default = JsonFileReader;
