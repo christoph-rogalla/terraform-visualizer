@@ -1,6 +1,9 @@
-﻿<section class="action-{{@key}}">
-  <h2>{{@key}}d Resources</h2>
+﻿<section>
+  <h2>
+    {{@key}}d Resources
+    <span class="count-badge">{{length}}</span>
+  </h2>
     {{#each this}}
-      {{> change-item}}
+      {{> change-item action=@../key}}
     {{/each}}
 </section>

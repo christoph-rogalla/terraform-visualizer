@@ -1,24 +1,27 @@
 ﻿<div class="change-item">
   <div class="change-header">
-    <h3 class="change-title">{{this.address}}</h3>
-      <button>test</button>
+    <div>
+      <h3 class="change-title">{{truncate this.address 100}}</h3>
+      <small>{{this.type}}</small>
+    </div>
+    <h4>{{action}}</h4>
   </div>
-    <details>
-        <summary>Open Details</summary>
+  <details>
+    <summary>Open Details</summary>
 
-        <div class="split">
-            <div class="left">
-                LEFT CONTENT
-                <code>
-
-                </code>
-            </div>
-            <div class="right">
-                Right content
-                <code>
-
-                </code>
-            </div>
-        </div>
-    </details>
+    <div class="split">
+      <div class="left">
+        Before
+        <pre>
+          {{highlightChanges this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}
+        </pre>
+      </div>
+      <div class="right">
+        After
+        <pre>
+          {{highlightChanges this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}
+        </pre>
+      </div>
+    </div>
+  </details>
 </div>

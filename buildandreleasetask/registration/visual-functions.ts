@@ -5,6 +5,7 @@ export function registerVisualisationFunctions() {
   registerJsonMasking();
   registerGroupByAction();
   registerHighlightChanges();
+  registerTruncate();
 }
 
 function registerGroupByAction() {
@@ -71,20 +72,33 @@ function registerJsonMasking() {
   });
 }
 
+function registerTruncate() {
+  handlebars.registerHelper("truncate", (str, len) => {
+    if (!str) return "";
+    return str.length > len ? str.slice(0, len) + "…" : str;
+  });
+}
+
 function maskSensitive(data: any, sensitiveMap: any): any {
+  if (sensitiveMap === true) return '***';
   if (!data || typeof data !== 'object') return data;
+
   if (Array.isArray(data)) {
-    return data.map((item, i) => maskSensitive(item, sensitiveMap[i]));
+    return data.map((item, i) =>
+      maskSensitive(item, sensitiveMap?.[i] ?? false)
+    );
   }
 
   const result: any = {};
   for (const key of Object.keys(data)) {
-    const isSensitive = sensitiveMap && sensitiveMap[key] === true;
-    if (isSensitive) {
-      result[key] = '***';
-    } else {
-      result[key] = maskSensitive(data[key], sensitiveMap[key]);
-    }
+    const isSensitive =
+      typeof sensitiveMap === 'object' &&
+      sensitiveMap !== null &&
+      sensitiveMap[key] === true;
+
+    result[key] = isSensitive
+      ? '***'
+      : maskSensitive(data[key], sensitiveMap?.[key]);
   }
   return result;
 }
