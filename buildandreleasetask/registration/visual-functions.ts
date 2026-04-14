@@ -79,10 +79,10 @@ function maskSensitive(data: any, sensitiveMap: any): any {
 }
 
 function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: any, side: string) {
-  if (main === null && side === "after")  return '<span class="added">— created —</span>';
-  if (main === null && side === "before") return '<span class="removed">— deleted —</span>';
+  if (main === null && side === "after") return '<span class="added">— deleted —</span>';
+  if (main === null && side === "before") return '<span class="removed">— created —</span>';
 
-  const safeMain  = maskSensitive(main  || {}, mainSensitive  || {});
+  const safeMain = maskSensitive(main || {}, mainSensitive || {});
   const safeOther = maskSensitive(other || {}, otherSensitive || {});
 
   const allKeys = Array.from(new Set([
@@ -91,9 +91,9 @@ function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: a
   ]));
 
   const lines = allKeys.map(key => {
-    const inMain  = key in safeMain;
+    const inMain = key in safeMain;
     const inOther = key in safeOther;
-    const val     = JSON.stringify(safeMain[key], null, 2);
+    const val = JSON.stringify(safeMain[key], null, 2);
     const otherVal = JSON.stringify(safeOther[key], null, 2);
 
     if (!inMain && side === "after") {

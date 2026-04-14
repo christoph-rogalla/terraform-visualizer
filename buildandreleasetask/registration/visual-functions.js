@@ -77,9 +77,9 @@ function maskSensitive(data, sensitiveMap) {
 }
 function renderSide(main, other, mainSensitive, otherSensitive, side) {
     if (main === null && side === "after")
-        return '<span class="added">— created —</span>';
+        return '<span class="added">— deleted —</span>';
     if (main === null && side === "before")
-        return '<span class="removed">— deleted —</span>';
+        return '<span class="removed">— created —</span>';
     const safeMain = maskSensitive(main || {}, mainSensitive || {});
     const safeOther = maskSensitive(other || {}, otherSensitive || {});
     const allKeys = Array.from(new Set([
