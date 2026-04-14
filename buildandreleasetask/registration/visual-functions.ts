@@ -4,7 +4,7 @@ import {ResourceChanges} from "../services/TerraformPlan";
 export function registerVisualisationFunctions() {
   registerJsonMasking();
   registerGroupByAction();
-  registerHighlightChanges();
+  registerRendersChanges();
   registerTruncate();
 }
 
@@ -26,38 +26,13 @@ function registerGroupByAction() {
   });
 }
 
-function registerHighlightChanges() {
-  handlebars.registerHelper('highlightChanges', (before, after, beforeSensitive, afterSensitive) => {
-    before = before || {};
-    after = after || {};
-    beforeSensitive = beforeSensitive || {};
-    afterSensitive = afterSensitive || {};
+function registerRendersChanges() {
+  handlebars.registerHelper("renderBefore", (before, after, beforeSensitive, afterSensitive) => {
+    return new handlebars.SafeString(renderSide(before, after, beforeSensitive, afterSensitive, "before"));
+  });
 
-    // Mask secrets using Terraform metadata
-    const safeBefore = maskSensitive(before, beforeSensitive);
-    const safeAfter = maskSensitive(after, afterSensitive);
-
-    const allKeys = Array.from(new Set([...Object.keys(safeBefore), ...Object.keys(safeAfter)]));
-    const parts = allKeys.map(k => {
-      const b = JSON.stringify(safeBefore[k], null, 2);
-      const a = JSON.stringify(safeAfter[k], null, 2);
-
-      if (!(k in safeBefore)) {
-        // Added key
-        return `<span class="bg-green-100 text-green-800 font-semibold">"${k}": ${a}</span>`;
-      } else if (!(k in safeAfter)) {
-        // Removed key
-        return `<span class="bg-red-100 text-red-800 line-through font-semibold">"${k}": ${b}</span>`;
-      } else if (b !== a) {
-        // Modified key
-        return `<span class="bg-yellow-100 text-yellow-800 font-semibold">"${k}": ${a}</span>`;
-      } else {
-        // Unchanged
-        return `"${k}": ${a}`;
-      }
-    });
-
-    return new handlebars.SafeString(`{<br>${parts.join(',<br>')}<br>}`);
+  handlebars.registerHelper("renderAfter", (before, after, beforeSensitive, afterSensitive) => {
+    return new handlebars.SafeString(renderSide(after, before, afterSensitive, beforeSensitive, "after"));
   });
 }
 
@@ -101,4 +76,42 @@ function maskSensitive(data: any, sensitiveMap: any): any {
       : maskSensitive(data[key], sensitiveMap?.[key]);
   }
   return result;
+}
+
+function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: any, side: string) {
+  if (main === null && side === "after")  return '<span class="added">— created —</span>';
+  if (main === null && side === "before") return '<span class="removed">— deleted —</span>';
+
+  const safeMain  = maskSensitive(main  || {}, mainSensitive  || {});
+  const safeOther = maskSensitive(other || {}, otherSensitive || {});
+
+  const allKeys = Array.from(new Set([
+    ...Object.keys(safeMain),
+    ...Object.keys(safeOther)
+  ]));
+
+  const lines = allKeys.map(key => {
+    const inMain  = key in safeMain;
+    const inOther = key in safeOther;
+    const val     = JSON.stringify(safeMain[key], null, 2);
+    const otherVal = JSON.stringify(safeOther[key], null, 2);
+
+    if (!inMain && side === "after") {
+      // key was added — highlight in after panel
+      return `<span class="line added">"${key}": ${val}</span>`;
+    } else if (!inOther && side === "before") {
+      // key was removed — highlight in before panel
+      return `<span class="line removed">"${key}": ${val}</span>`;
+    } else if (inMain && inOther && val !== otherVal) {
+      // key changed — highlight in both panels
+      return `<span class="line changed">"${key}": ${val}</span>`;
+    } else if (!inMain) {
+      // key doesn't exist on this side — skip
+      return null;
+    } else {
+      return `<span class="line">"${key}": ${val}</span>`;
+    }
+  }).filter(Boolean);
+
+  return lines.join("<br />");
 }

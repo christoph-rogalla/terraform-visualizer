@@ -12,15 +12,11 @@
     <div class="split">
       <div class="left">
         Before
-        <pre>
-          {{highlightChanges this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}
-        </pre>
+        <pre>{{renderBefore this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}</pre>
       </div>
       <div class="right">
         After
-        <pre>
-          {{highlightChanges this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}
-        </pre>
+        <pre>{{renderAfter this.change.before this.change.after this.change.before_sensitive this.change.after_sensitive}}</pre>
       </div>
     </div>
   </details>
