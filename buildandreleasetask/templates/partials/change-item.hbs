@@ -1,8 +1,10 @@
 ﻿<div class="change-item">
   <div class="change-header">
     <div>
-      <h3 class="change-title">{{truncate this.address 100}}</h3>
-      <small>{{this.type}}</small>
+      <h3 class="change-title">{{truncate this.name 100}}</h3>
+      <small>
+        <strong>{{this.type}}</strong> - {{truncate this.address 100}}
+      </small>
     </div>
     <h4>{{action}}</h4>
   </div>

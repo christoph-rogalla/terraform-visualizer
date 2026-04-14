@@ -2,7 +2,6 @@
 import {ResourceChanges} from "../services/TerraformPlan";
 
 export function registerVisualisationFunctions() {
-  registerJsonMasking();
   registerGroupByAction();
   registerRendersChanges();
   registerTruncate();
@@ -33,17 +32,6 @@ function registerRendersChanges() {
 
   handlebars.registerHelper("renderAfter", (before, after, beforeSensitive, afterSensitive) => {
     return new handlebars.SafeString(renderSide(after, before, afterSensitive, beforeSensitive, "after"));
-  });
-}
-
-function registerJsonMasking() {
-  handlebars.registerHelper("safeJsonWithSensitiveFlags", (obj, sensitiveMap) => {
-    try {
-      const masked = maskSensitive(obj, sensitiveMap);
-      return JSON.stringify(masked, null, 2);
-    } catch (e) {
-      return "[Error rendering object]";
-    }
   });
 }
 
@@ -78,9 +66,9 @@ function maskSensitive(data: any, sensitiveMap: any): any {
   return result;
 }
 
-function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: any, side: string) {
-  if (main === null && side === "after") return '<span class="added">— deleted —</span>';
-  if (main === null && side === "before") return '<span class="removed">— created —</span>';
+function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: any, mainIs: string) {
+  if (main === null && mainIs === "after") return '<span class="added">— deleted —</span>';
+  if (main === null && mainIs === "before") return '<span class="removed">— created —</span>';
 
   const safeMain = maskSensitive(main || {}, mainSensitive || {});
   const safeOther = maskSensitive(other || {}, otherSensitive || {});
@@ -95,11 +83,10 @@ function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: a
     const inOther = key in safeOther;
     const val = JSON.stringify(safeMain[key], null, 2);
     const otherVal = JSON.stringify(safeOther[key], null, 2);
-
-    if (!inMain && side === "after") {
+    if (!inMain && mainIs === "after") {
       // key was added — highlight in after panel
       return `<span class="line added">"${key}": ${val}</span>`;
-    } else if (!inOther && side === "before") {
+    } else if (!inOther && mainIs === "before") {
       // key was removed — highlight in before panel
       return `<span class="line removed">"${key}": ${val}</span>`;
     } else if (inMain && inOther && val !== otherVal) {
@@ -113,5 +100,5 @@ function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: a
     }
   }).filter(Boolean);
 
-  return lines.join("<br />");
+  return lines.join(",<br />");
 }

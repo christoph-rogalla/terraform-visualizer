@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerVisualisationFunctions = registerVisualisationFunctions;
 const handlebars_1 = __importDefault(require("handlebars"));
 function registerVisualisationFunctions() {
-    registerJsonMasking();
     registerGroupByAction();
     registerRendersChanges();
     registerTruncate();
@@ -38,17 +37,6 @@ function registerRendersChanges() {
         return new handlebars_1.default.SafeString(renderSide(after, before, afterSensitive, beforeSensitive, "after"));
     });
 }
-function registerJsonMasking() {
-    handlebars_1.default.registerHelper("safeJsonWithSensitiveFlags", (obj, sensitiveMap) => {
-        try {
-            const masked = maskSensitive(obj, sensitiveMap);
-            return JSON.stringify(masked, null, 2);
-        }
-        catch (e) {
-            return "[Error rendering object]";
-        }
-    });
-}
 function registerTruncate() {
     handlebars_1.default.registerHelper("truncate", (str, len) => {
         if (!str)
@@ -75,10 +63,10 @@ function maskSensitive(data, sensitiveMap) {
     }
     return result;
 }
-function renderSide(main, other, mainSensitive, otherSensitive, side) {
-    if (main === null && side === "after")
+function renderSide(main, other, mainSensitive, otherSensitive, mainIs) {
+    if (main === null && mainIs === "after")
         return '<span class="added">— deleted —</span>';
-    if (main === null && side === "before")
+    if (main === null && mainIs === "before")
         return '<span class="removed">— created —</span>';
     const safeMain = maskSensitive(main || {}, mainSensitive || {});
     const safeOther = maskSensitive(other || {}, otherSensitive || {});
@@ -91,11 +79,11 @@ function renderSide(main, other, mainSensitive, otherSensitive, side) {
         const inOther = key in safeOther;
         const val = JSON.stringify(safeMain[key], null, 2);
         const otherVal = JSON.stringify(safeOther[key], null, 2);
-        if (!inMain && side === "after") {
+        if (!inMain && mainIs === "after") {
             // key was added — highlight in after panel
             return `<span class="line added">"${key}": ${val}</span>`;
         }
-        else if (!inOther && side === "before") {
+        else if (!inOther && mainIs === "before") {
             // key was removed — highlight in before panel
             return `<span class="line removed">"${key}": ${val}</span>`;
         }
@@ -111,5 +99,9 @@ function renderSide(main, other, mainSensitive, otherSensitive, side) {
             return `<span class="line">"${key}": ${val}</span>`;
         }
     }).filter(Boolean);
-    return lines.join("<br />");
+    if (safeMain["id"] == "https://kv-rhegpt-01-dev.vault.azure.net/secrets/sql-database-connection-string/ea73ed2e5fe64d84944ecca7a7d23ecb") {
+        console.log(lines);
+        console.log(lines.join(",<br />"));
+    }
+    return lines.join(",<br />");
 }
