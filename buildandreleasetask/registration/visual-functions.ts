@@ -1,5 +1,6 @@
 ﻿import handlebars from "handlebars";
 import {ResourceChanges} from "../services/TerraformPlan";
+import {EntityDifferenceBuilder} from "../services/DiffBuilder";
 
 export function registerVisualisationFunctions() {
   registerGroupByAction();
@@ -42,63 +43,10 @@ function registerTruncate() {
   });
 }
 
-function maskSensitive(data: any, sensitiveMap: any): any {
-  if (sensitiveMap === true) return '***';
-  if (!data || typeof data !== 'object') return data;
-
-  if (Array.isArray(data)) {
-    return data.map((item, i) =>
-      maskSensitive(item, sensitiveMap?.[i] ?? false)
-    );
-  }
-
-  const result: any = {};
-  for (const key of Object.keys(data)) {
-    const isSensitive =
-      typeof sensitiveMap === 'object' &&
-      sensitiveMap !== null &&
-      sensitiveMap[key] === true;
-
-    result[key] = isSensitive
-      ? '***'
-      : maskSensitive(data[key], sensitiveMap?.[key]);
-  }
-  return result;
-}
-
-function renderSide(main: any, other: any, mainSensitive: any, otherSensitive: any, mainIs: string) {
-  if (main === null && mainIs === "after") return '<span class="added">— deleted —</span>';
-  if (main === null && mainIs === "before") return '<span class="removed">— created —</span>';
-
-  const safeMain = maskSensitive(main || {}, mainSensitive || {});
-  const safeOther = maskSensitive(other || {}, otherSensitive || {});
-
-  const allKeys = Array.from(new Set([
-    ...Object.keys(safeMain),
-    ...Object.keys(safeOther)
-  ]));
-
-  const lines = allKeys.map(key => {
-    const inMain = key in safeMain;
-    const inOther = key in safeOther;
-    const val = JSON.stringify(safeMain[key], null, 2);
-    const otherVal = JSON.stringify(safeOther[key], null, 2);
-    if (!inMain && mainIs === "after") {
-      // key was added — highlight in after panel
-      return `<span class="line added">"${key}": ${val}</span>`;
-    } else if (!inOther && mainIs === "before") {
-      // key was removed — highlight in before panel
-      return `<span class="line removed">"${key}": ${val}</span>`;
-    } else if (inMain && inOther && val !== otherVal) {
-      // key changed — highlight in both panels
-      return `<span class="line changed">"${key}": ${val}</span>`;
-    } else if (!inMain) {
-      // key doesn't exist on this side — skip
-      return null;
-    } else {
-      return `<span class="line">"${key}": ${val}</span>`;
-    }
-  }).filter(Boolean);
-
-  return lines.join(",<br />");
+function renderSide(main: any, side: any, mainSensitive: any, sideSensitive: any, mainIs: "after" | "before") {
+  return new EntityDifferenceBuilder()
+    .setMain(main, mainSensitive)
+    .setSide(side, sideSensitive)
+    .setCurrentSide(mainIs)
+    .renderAsHtml();
 }
