@@ -1,6 +1,6 @@
 ﻿import handlebars from "handlebars";
 import {ResourceChanges} from "../services/TerraformPlan";
-import {EntityDifferenceBuilder} from "../services/DiffBuilder";
+import {EntityDifferenceBuilder} from "../services/EntityDifferenceBuilder";
 
 export function registerVisualisationFunctions() {
   registerGroupByAction();

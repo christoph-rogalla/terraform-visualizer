@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiffBuilder = void 0;
-class DiffBuilder {
+class EntityDifferenceBuilder {
     mainEntities;
     mainSensitive;
     sideEntities;
@@ -86,4 +86,4 @@ class DiffBuilder {
         });
     }
 }
-exports.DiffBuilder = DiffBuilder;
+exports.DiffBuilder = EntityDifferenceBuilder;
