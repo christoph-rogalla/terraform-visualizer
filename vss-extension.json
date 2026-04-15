@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "tf-visualizer",
   "name": "Terraform Visualizer",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "publisher": "ChristophRogalla",
   "targets": [
     {
